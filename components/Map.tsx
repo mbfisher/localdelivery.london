@@ -39,6 +39,7 @@ export const getMap = async (): Promise<mapboxgl.Map> => {
         features: []
       }
     });
+
     map.addLayer({
       id: "results-markers",
       type: "symbol",
@@ -66,7 +67,9 @@ export const getMap = async (): Promise<mapboxgl.Map> => {
       //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       // }
 
-      const html = `<a href="${properties.urls[0]}" target="_blank">${properties.name}</a>`;
+      const html = properties.url
+        ? `<a href="${properties.url}" target="_blank">${properties.name}</a>`
+        : properties.name;
       new mapboxgl.Popup()
         .setLngLat([lon, lat])
         .setHTML(html)
@@ -92,11 +95,15 @@ interface MapProps {
 }
 
 export const Map: React.ComponentType<MapProps> = ({ className }) => {
+  const { query } = useStore();
+
   useEffect(() => {
-    getMap();
+    async function renderMap() {
+      (await getMap()).on("load", () => query.showBusinessesOnMap());
+    }
+    renderMap();
   }, []);
 
-  const { query } = useStore();
   // const location = useObserver(() => query.location);
 
   useEffect(
