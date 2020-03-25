@@ -16,6 +16,7 @@ interface BusinessEntryFields {
   name: string;
   location: EntryFields.Location | undefined;
   url: string[];
+  description?: string;
 }
 
 interface LocationLike {
@@ -30,7 +31,8 @@ const LocationModel = types.model({
 const BusinessEntryModel = types.model({
   name: types.string,
   location: types.maybe(LocationModel),
-  url: types.array(types.string)
+  url: types.array(types.string),
+  description: types.maybe(types.string)
 });
 
 const QueryModel = types
@@ -57,7 +59,8 @@ const QueryModel = types
         .map(({ fields }) => ({
           name: fields.name,
           url: fields.url && fields.url.length ? fields.url[0] : null,
-          location: fields.location
+          location: fields.location,
+          description: fields.description
         })) as any;
 
       // Filter out the businesses without locations, and construct properties to be used
@@ -67,7 +70,7 @@ const QueryModel = types
         properties: GeoJSON.GeoJsonProperties;
       }> = [];
 
-      results.forEach(({ location, name, url }) => {
+      results.forEach(({ location, name, url, description }) => {
         if (!location) {
           return;
         }
@@ -75,7 +78,8 @@ const QueryModel = types
           coordinates: [location.lon, location.lat],
           properties: {
             name,
-            url
+            url,
+            description
           }
         });
       });

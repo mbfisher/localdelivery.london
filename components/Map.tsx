@@ -67,9 +67,13 @@ export const getMap = async (): Promise<mapboxgl.Map> => {
       //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
       // }
 
-      const html = properties.url
-        ? `<a href="${properties.url}" target="_blank">${properties.name}</a>`
+      let html = properties.url
+        ? `<p><a href="${properties.url}" target="_blank">${properties.name}</a></p>`
         : properties.name;
+      if (properties.description) {
+        html += `<p>${properties.description}</p>`;
+      }
+
       new mapboxgl.Popup()
         .setLngLat([lon, lat])
         .setHTML(html)
