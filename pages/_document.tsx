@@ -29,10 +29,17 @@ export default class MyDocument extends Document {
           />
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
+          <meta name="twitter:card" content="summary" />
+          <meta property="og:url" content="https://localdelivery.london/" />
+          <meta property="og:title" content="Local Delivery London" />
           <meta
-            name="twitter:card"
+            property="og:description"
             content="A directory of independent businesses delivering food and supplies
             to their local communities."
+          />
+          <meta
+            property="og:image"
+            content="https://localdelivery.london/favicon.png"
           />
           <link rel="icon" type="image/png" href="/favicon.png" />
           <link
