@@ -29,6 +29,10 @@ export default class MyDocument extends Document {
           />
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
+          <meta name="twitter:card" content="summary">
+            A directory of independent businesses delivering food and supplies
+            to their local communities.
+          </meta>
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
