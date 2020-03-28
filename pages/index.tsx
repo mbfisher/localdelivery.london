@@ -32,7 +32,8 @@ const useStyles = makeStyles(theme => ({
     width: "100vw",
     height: "67vh",
     [theme.breakpoints.up("sm")]: {
-      width: "67vw"
+      width: "67vw",
+      height: "100vh"
     }
   },
   results: {
