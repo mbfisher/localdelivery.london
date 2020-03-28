@@ -2,7 +2,7 @@ import { createClient, EntryCollection, EntryFields } from "contentful";
 import { GeoJSONSource } from "mapbox-gl";
 import { flow, types } from "mobx-state-tree";
 import React, { useContext } from "react";
-import { getMap } from "../components/Map";
+import { getMap } from "./components/Map";
 
 const spaceId = "dzl67q6mcfj7";
 const apiKey = "UX3to0-Tfj-niuY877m9wwD9MCCOBbOzdESp5WDptBY";
@@ -17,6 +17,7 @@ interface BusinessEntryFields {
   location: EntryFields.Location | undefined;
   url: string[];
   description?: string;
+  items: string[];
 }
 
 interface LocationLike {
@@ -31,9 +32,12 @@ const LocationModel = types.model({
 const BusinessEntryModel = types.model({
   name: types.string,
   location: types.maybe(LocationModel),
-  url: types.array(types.string),
-  description: types.maybe(types.string)
+  url: types.maybeNull(types.string),
+  description: types.maybe(types.string),
+  items: types.array(types.string)
 });
+
+export type BusinessEntryModelType = typeof BusinessEntryModel.Type;
 
 const QueryModel = types
   .model({
@@ -60,9 +64,11 @@ const QueryModel = types
           name: fields.name,
           url: fields.url && fields.url.length ? fields.url[0] : null,
           location: fields.location,
-          description: fields.description
+          description: fields.description,
+          items: fields.items
         })) as any;
 
+      self.results = results;
       // Filter out the businesses without locations, and construct properties to be used
       // for things like tooltips
       const features: Array<{

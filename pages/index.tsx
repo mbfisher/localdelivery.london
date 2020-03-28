@@ -13,20 +13,39 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 import { onSnapshot } from "mobx-state-tree";
 import React, { useState, useEffect } from "react";
-import { AppBar } from "../components/AppBar";
+import { AppBar } from "../src/components/AppBar";
 // import makeInspectable from "mobx-devtools-mst";
 import { createRootStore, StoreContext } from "../src/store";
 import dynamic from "next/dynamic";
+import { SearchResults } from "../src/components/SearchResults";
 
-const Map = dynamic(() => import("../components/Map").then(mod => mod.Map), {
-  ssr: false
-});
+const Map = dynamic(
+  () => import("../src/components/Map").then(mod => mod.Map),
+  {
+    ssr: false
+  }
+);
 
 const useStyles = makeStyles(theme => ({
   map: {
     position: "fixed",
     width: "100vw",
-    height: "100vh"
+    height: "67vh",
+    [theme.breakpoints.up("sm")]: {
+      width: "67vw"
+    }
+  },
+  results: {
+    position: "absolute",
+    width: "100vw",
+    top: "67vh",
+    padding: theme.spacing(2),
+    [theme.breakpoints.up("sm")]: {
+      minHeight: "100vh",
+      width: "33vw",
+      top: 64,
+      right: 0
+    }
   }
 }));
 
@@ -88,7 +107,8 @@ function App() {
     <>
       <AppBar />
       <Map className={styles.map} />
-      <Box position="absolute" bottom={0} right={0} m={2}>
+      <SearchResults className={styles.results} />
+      <Box position="fixed" bottom={0} right={0} m={2}>
         <Fab
           color="primary"
           href="https://forms.gle/Vn6kbWaU5p4aBdS49"

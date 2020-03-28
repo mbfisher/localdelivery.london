@@ -10,8 +10,8 @@ import {
 import Toolbar from "@material-ui/core/Toolbar";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
-import React, { useState } from "react";
-import { useStore } from "../src/store";
+import React, { useState, useEffect } from "react";
+import { useStore } from "../store";
 
 interface StyleProps {
   searchButtonActive: boolean;
@@ -40,8 +40,6 @@ const useStyles = makeStyles<Theme, StyleProps>((theme: Theme) =>
     },
     input: {
       width: "10em"
-      // backgroundColor: "white",
-      // padding: 0
     },
     searchButton: props => ({
       padding: theme.spacing(1, 0, 1, 1),
@@ -58,10 +56,7 @@ export function AppBar() {
   const store = useStore();
   const inputRef = React.createRef<HTMLInputElement>();
 
-  const onSubmit: React.FormEventHandler = async event => {
-    console.log(`Resolving postcode ${inputValue}`);
-    event.preventDefault();
-
+  const setLocation = async (postcode: string) => {
     const response = await fetch(
       `https://api.postcodes.io/postcodes/${inputValue}`
     );
@@ -71,13 +66,20 @@ export function AppBar() {
       lon: result.longitude,
       lat: result.latitude
     });
+  };
+
+  const onSubmit: React.FormEventHandler = async event => {
+    console.log(`Resolving postcode ${inputValue}`);
+    event.preventDefault();
+
+    await setLocation(inputValue);
 
     inputRef.current!.blur();
   };
 
   return (
     <div className={classes.grow}>
-      <MaterialAppBar position="static">
+      <MaterialAppBar position="fixed">
         <Toolbar className={classes.toolbar}>
           <IconButton className={classes.menuButton} aria-label="menu">
             <MenuIcon />
@@ -107,27 +109,3 @@ export function AppBar() {
     </div>
   );
 }
-
-/**
-<form onSubmit={onSubmit}>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Enter your postcode"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput
-                }}
-                inputProps={{ "aria-label": "search" }}
-                value={inputValue}
-                onChange={e => setInputValue(e.target.value)}
-              />
-              {showSubmitButton && (
-                <Button color="inherit" type="submit">
-                  Go
-                </Button>
-              )}
-            </div>
-          </form>*/

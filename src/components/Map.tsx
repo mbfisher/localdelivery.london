@@ -1,7 +1,7 @@
 import { Box } from "@material-ui/core";
 import { autorun } from "mobx";
 import React, { useEffect } from "react";
-import { useStore } from "../src/store";
+import { useStore } from "../store";
 
 export const accessToken =
   "pk.eyJ1IjoibWJmaXNoZXIiLCJhIjoiY2p4ejR4eWVrMDBzeTNsbWNrbzZwbGVycCJ9.1W4vzrsez8evMEBuK8I5Vw";
